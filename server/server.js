@@ -42,7 +42,7 @@ io.on('connection', (socket) => {
         io.emit('newMessage', generateMessage(message.from, message.text));
        
        //acknolwedges that the data was got from the server
-        callback('This is from the server');
+        callback();
         //broadcase to specific user except me
         // socket.broadcast.emit('newMessage', {
         //     from: message.from,

@@ -17,6 +17,7 @@ app.use(express.static(publicPath));
 io.on('connection', (socket) => {
     console.log('New user connected');
 
+    //socket.emit emits to just one connection
     //name of the event you want to emit
     //data should be specified as its the data that should go
     // socket.emit('newEmail', {
@@ -25,18 +26,19 @@ io.on('connection', (socket) => {
     //     createdAt: 123
     // });
 
-    socket.emit('newMessage', {
-        from: 'mike',
-        text: 'hey what is going on',
-        createdAt: 123
-    });
-
     // socket.on('createEmail', (newEmail) => {
     //     console.log('createEmail', newEmail);
     // });
-    
-    socket.on('createMessage', (newMessage) => {
-        console.log('create message', newMessage);
+
+    socket.on('createMessage', (message) => {
+        console.log('create message', message);
+
+        //emits to every connection
+        io.emit('newMessage', {
+            from: message.from,
+            text: message.text,
+            createdAt: new Date().getTime()
+        })
     });
 
     //listener

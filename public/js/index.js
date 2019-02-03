@@ -18,6 +18,10 @@ socket.on('disconnect', function() {
 //     console.log('New email', email);
 // });
 
+socket.on('newUser', function(message){
+    console.log('New message', message) 
+});
+
 socket.on('newMessage', function(message){
     console.log('New message', message) 
 });

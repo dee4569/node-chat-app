@@ -17,6 +17,20 @@ app.use(express.static(publicPath));
 io.on('connection', (socket) => {
     console.log('New user connected');
 
+    // emits to every connection
+    socket.emit('newMessage', {
+        from: 'Admin',
+        text: 'Welcome to the chat app',
+        createdAt: new Date().getTime()
+    });
+    
+    socket.broadcast.emit('newUser', {
+        from: 'Admin',
+        text: 'New user joined',
+        createdAt: new Date().getTime()
+    });
+    
+
     //socket.emit emits to just one connection
     //name of the event you want to emit
     //data should be specified as its the data that should go
@@ -32,13 +46,18 @@ io.on('connection', (socket) => {
 
     socket.on('createMessage', (message) => {
         console.log('create message', message);
-
-        //emits to every connection
         io.emit('newMessage', {
-            from: message.from,
+            from:message.from,
             text: message.text,
             createdAt: new Date().getTime()
-        })
+        });
+
+        //broadcase to specific user except me
+        // socket.broadcast.emit('newMessage', {
+        //     from: message.from,
+        //     text: message.text,
+        //     createdAt: new Date().getTime()
+        // })
     });
 
     //listener

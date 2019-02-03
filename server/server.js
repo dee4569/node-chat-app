@@ -17,6 +17,29 @@ app.use(express.static(publicPath));
 io.on('connection', (socket) => {
     console.log('New user connected');
 
+    //name of the event you want to emit
+    //data should be specified as its the data that should go
+    // socket.emit('newEmail', {
+    //     from: 'mike@example.com',
+    //     text: 'hey what is going on',
+    //     createdAt: 123
+    // });
+
+    socket.emit('newMessage', {
+        from: 'mike',
+        text: 'hey what is going on',
+        createdAt: 123
+    });
+
+    // socket.on('createEmail', (newEmail) => {
+    //     console.log('createEmail', newEmail);
+    // });
+    
+    socket.on('createMessage', (newMessage) => {
+        console.log('create message', newMessage);
+    });
+
+    //listener
     socket.on('disconnect', () => {
         console.log('User was disconnected');
     });

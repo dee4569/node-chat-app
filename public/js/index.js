@@ -18,10 +18,26 @@ socket.on('disconnect', function() {
 //     console.log('New email', email);
 // });
 
-socket.on('newUser', function(message){
-    console.log('New message', message) 
-});
+// socket.on('newUser', function(message){
+//     console.log('New message', message) 
+// });
 
 socket.on('newMessage', function(message){
-    console.log('New message', message) 
+    console.log('New message', message);
+    var li = jQuery('<li></li>');
+    li.text(`${message.from}: ${message.text}`); 
+
+    jQuery('#messages').append(li);
+});
+
+jQuery('#message-form').on('submit', function (e) {
+    //prevents the default behaviour for the submit event
+    e.preventDefault();
+
+    socket.emit('createMessage', {
+        from: 'User',
+        text: jQuery('[name=message]').val()
+    }, function() {
+
+    });
 });

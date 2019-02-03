@@ -23,6 +23,9 @@ io.on('connection', (socket) => {
     
     socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user joined'));
     
+    socket.on('join', (params, callback) => {
+        
+    });
 
     //socket.emit emits to just one connection
     //name of the event you want to emit

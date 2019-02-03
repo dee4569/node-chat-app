@@ -24,11 +24,13 @@ socket.on('connect', function() {
 
     var params = jQuery.deparam(window.location.search);
 
-    socket.emit('join', params, function(err){
-        if(err){
-
-        }else{
-            
+    socket.emit('join', params, function (err){
+        if (err){
+            alert(err);
+            //redirected back to the homepage
+            window.location.href = '/';
+        } else {
+            console.log('No error');
         }
     });
 

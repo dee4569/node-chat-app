@@ -4,6 +4,7 @@ const express = require('express');
 const socketIO = require('socket.io');
  
 const {generateMessage, generateLocationMessage} = require('./utils/message');
+const {isRealString} = require('./utils/validation');
 const publicPath = path.join(__dirname, '../public');
 const port = process.env.PORT || 3000;
 var app = express();
@@ -17,14 +18,27 @@ app.use(express.static(publicPath));
 //lets you listen to a new connection
 io.on('connection', (socket) => {
     console.log('New user connected');
-
-    // emits to every connection
-    socket.emit('newMessage', generateMessage('Admin', 'Welcome to the chat app!'));
-    
-    socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user joined'));
     
     socket.on('join', (params, callback) => {
-        
+        if(!isRealString(params.name) || !isRealString(params.room)){
+            callback('Name and room name are required');
+        }
+
+        //special place for people to talk in the same room
+        socket.join(params.room);
+
+        //io.to('Theoffice fans').emit is a method that takes the room name; that allows to send a message to everone
+        //who is connected to the room
+
+        //Different method names
+        //io.emit - send to every single connected user
+        //socket.broadcast.emit - send to everyone except for the current user
+        //socket.emit - specifically to just one user
+
+        // emits to every connection
+        socket.emit('newMessage', generateMessage('Admin', 'Welcome to the chat app!'));
+        socket.broadcast.to(params.room).emit('newMessage', generateMessage('Admin', `${params.name} has joined`));
+        callback();
     });
 
     //socket.emit emits to just one connection
